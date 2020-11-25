@@ -122,7 +122,10 @@ namespace NetXLSX
             foreach (var prop in t.GetProperties())
             {
                 var mapping = GetPropertyXLSXMapping(prop);
-                propertyMap.Add(mapping.XLSXProperty, prop.Name);
+                if(mapping != null)
+                {
+                    propertyMap.Add(mapping.XLSXProperty, prop.Name);
+                }
             }
             return propertyMap;
         }
@@ -136,7 +139,10 @@ namespace NetXLSX
             foreach (var prop in t.GetProperties())
             {
                 var mapping = GetPropertyXLSXMapping(prop);
-                propertyMap.Add(mapping.XLSXProperty, mapping.PropertyType);
+                if(mapping != null)
+                {
+                    propertyMap.Add(mapping.XLSXProperty, mapping.PropertyType);
+                }
             }
             return propertyMap;
         }
@@ -148,12 +154,6 @@ namespace NetXLSX
         private XLSXMapping GetPropertyXLSXMapping(PropertyInfo p)
         {
             XLSXMapping mapping = (XLSXMapping)p.GetCustomAttribute(typeof(XLSXMapping));
-            if (mapping == null)
-            {
-                throw new ExcelReaderException(
-                    "property mapping", $"XLSXMapping attribute not found on prop {p.Name}. All model props must have an XLSXMapping attribute."
-                );
-            }
             return mapping;
         }
 

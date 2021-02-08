@@ -1,3 +1,5 @@
+<a href="https://codeclimate.com/github/ryanbrandt/netxlsx/maintainability"><img src="https://api.codeclimate.com/v1/badges/7223116e178d83ad84b9/maintainability" /></a>
+
 # NetXLSX
 
 Generalized XLSX utilities for C#

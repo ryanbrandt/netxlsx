@@ -9,7 +9,7 @@ namespace NetXLSX
     /// <summary>
     /// Class to containing methods to handle all XLSX reading and object mapping.
     /// </summary>
-    public class ExcelReader
+    public class XLSXReader
     {
         /// <summary>
         /// Generic method to map an XLSX sheet to a list of objects using reflection.
@@ -52,20 +52,6 @@ namespace NetXLSX
         }
 
         /// <summary>
-        /// Utility to grab a list of XLSX headers for a given sheet
-        /// </summary>
-        public List<string> GetXLSXHeaders(IXLWorksheet sheet, int columnCount)
-        {
-            List<string> headers = new List<string>();
-            for (int i = 1; i <= columnCount; i += 1)
-            {
-                headers.Add(sheet.Cell(1, i).GetString());
-            }
-
-            return headers;
-        }
-
-        /// <summary>
         /// Grabs a list of all XLSX worksheet names
         /// <summary>
         public List<string> GetWorksheets(string xlsxPath)
@@ -81,6 +67,20 @@ namespace NetXLSX
 
                 return worksheets;
             }
+        }
+
+        /// <summary>
+        /// Utility to grab a list of XLSX headers for a given sheet
+        /// </summary>
+        private List<string> GetXLSXHeaders(IXLWorksheet sheet, int columnCount)
+        {
+            List<string> headers = new List<string>();
+            for (int i = 1; i <= columnCount; i += 1)
+            {
+                headers.Add(sheet.Cell(1, i).GetString());
+            }
+
+            return headers;
         }
 
         /// <summary>

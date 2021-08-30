@@ -1,14 +1,15 @@
+[![ryanbrandt](https://circleci.com/gh/ryanbrandt/netxlsx.svg?style=svg)](https://app.circleci.com/pipelines/github/ryanbrandt/netxlsx)
 <a href="https://codeclimate.com/github/ryanbrandt/netxlsx/maintainability"><img src="https://api.codeclimate.com/v1/badges/7223116e178d83ad84b9/maintainability" /></a>
 
 # NetXLSX
 
-Generalized XLSX utilities for C#
+An easier to use .NET XLSX API
 
-# Docs
+# Documentation
 
 ## `XLSXReader`
 
-Utility class for all XLSX parsing/reading
+Utility class for XLSX read operations
 
 ```csharp
 XLSXReader _reader = new XLSXReader();
@@ -18,7 +19,7 @@ XLSXReader _reader = new XLSXReader();
 
 Generic method to parse all data in an XLSX file from a given worksheet into a List of type T.
 
-T must be a model for which each property has an `XLSXMapping` attribute and T must have a no-arg constructor.
+Each property within T which we wish to have automapped to the corresponding XLSX column must have an `XLSXMapping` attribute, specifying the associated column name and type
 
 ```csharp
 public class MyModel
@@ -26,7 +27,7 @@ public class MyModel
     [XLSXMapping("Some Property Column", typeof(string))]
     public string SomeProperty { get; set; }
 
-    public MyModel() { }
+    public string SomeUnmappedProperty { get; set; }
 }
 ...
 
@@ -39,12 +40,4 @@ Retrieves all worksheet names in a given XLSX file
 
 ```csharp
 List<string> sheets = _reader.GetWorksheets("<path to my XLSX file>");
-```
-
-## GetXLSXHeaders
-
-Retrieves all column headers in a given XLSX file worksheet
-
-```csharp
-List<string> headers = _reader.GetXLSXHeaders("<path to my XLSX file>", "<sheet of interest>");
 ```

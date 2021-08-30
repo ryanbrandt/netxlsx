@@ -9,6 +9,5 @@ jobs:
 
     steps:
       - checkout
-      - run: cd NetXLSX.test
-      - run: dotnet build
-      - run: dotnet test
+      - run: dotnet build NetXLSX.Test
+      - run: dotnet test NetXLSX.Test

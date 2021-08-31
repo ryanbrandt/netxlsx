@@ -157,9 +157,9 @@ namespace NetXLSX
             return mapping;
         }
 
-        public class ExcelReaderException : Exception
+        internal class XLSXReaderException : Exception
         {
-            public ExcelReaderException(string category, string message)
+            public XLSXReaderException(string category, string message)
                 : base($"[{category.ToUpper()}] {message}") { }
         }
     }

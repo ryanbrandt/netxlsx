@@ -15,7 +15,7 @@ namespace NetXLSX.Test
         {
 
             var reader = new XLSXReader();
-
+          
             Assert.NotNull(reader);
         }
 

@@ -1,8 +1,10 @@
+using System.Linq;
 using NetXLSX.Test.Mock;
 using Xunit;
 
 namespace NetXLSX.Test
 {
+    [Collection("XLSXTests")]
     public class XLSXReaderTest
     {
         private const string MOCK_XLSX_PATH = "Mock\\mock_spreadsheet.xlsx";
@@ -46,8 +48,10 @@ namespace NetXLSX.Test
             var reader = new XLSXReader();
             var result = reader.GetWorksheets(MOCK_XLSX_PATH);
 
-            Assert.Single(result);
+            Assert.Equal(3, result.Count());
             Assert.Equal(result[0], MOCK_XLSX_SHEET);
+            Assert.Equal("Partial", result[1]);
+            Assert.Equal("Complete", result[2]);
         }
     }
 }

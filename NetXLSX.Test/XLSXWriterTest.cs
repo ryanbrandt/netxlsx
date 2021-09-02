@@ -4,9 +4,11 @@ using Xunit;
 
 namespace NetXLSX.Test
 {
+    [Collection("XLSXTests")]
     public class XLSXWriterTest
     {
 
+        private const string MOCK_EXISTING_XLSX_PATH = "Mock\\mock_spreadsheet.xlsx";
         private const string MOCK_XLSX_PATH = "Mock\\mock_spreadsheet2.xlsx";
         private const string MOCK_COMPLETE_XLSX_SHEET = "Complete";
         private const string MOCK_PARTIAL_XLSX_SHEET = "Partial";
@@ -63,9 +65,9 @@ namespace NetXLSX.Test
             expected.AddRange(records);
 
             var writer = new XLSXWriter();
-            writer.PutRecords(records, MOCK_XLSX_PATH, MOCK_PARTIAL_XLSX_SHEET, true);
+            writer.PutRecords(records, MOCK_EXISTING_XLSX_PATH, MOCK_PARTIAL_XLSX_SHEET, true);
 
-            var results = _reader.GetRecords<MockSpreadsheetModel>(MOCK_XLSX_PATH, MOCK_PARTIAL_XLSX_SHEET);
+            var results = _reader.GetRecords<MockSpreadsheetModel>(MOCK_EXISTING_XLSX_PATH, MOCK_PARTIAL_XLSX_SHEET);
 
             MockSpreadsheetModel.AssertCollectionsEqual(results, expected);
         }
@@ -86,9 +88,9 @@ namespace NetXLSX.Test
             expected.AddRange(records);
 
             var writer = new XLSXWriter();
-            writer.PutRecords(records, MOCK_XLSX_PATH, MOCK_COMPLETE_XLSX_SHEET, true);
+            writer.PutRecords(records, MOCK_EXISTING_XLSX_PATH, MOCK_COMPLETE_XLSX_SHEET, true);
 
-            var results = _reader.GetRecords<MockSpreadsheetModelComplete>(MOCK_XLSX_PATH, MOCK_COMPLETE_XLSX_SHEET);
+            var results = _reader.GetRecords<MockSpreadsheetModelComplete>(MOCK_EXISTING_XLSX_PATH, MOCK_COMPLETE_XLSX_SHEET);
 
             MockSpreadsheetModelComplete.AssertCollectionsEqual(results, expected);
         }

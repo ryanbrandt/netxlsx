@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using ClosedXML.Excel;
 
@@ -8,6 +7,20 @@ namespace NetXLSX
 {
     internal static class XLSXUtilities
     {
+        /// <summary>
+        /// Utility to grab a list of XLSX headers in order for a given sheet
+        /// </summary>
+        public static List<string> GetXLSXHeaders(IXLWorksheet sheet, int columnCount)
+        {
+            List<string> headers = new List<string>();
+            for (int i = 1; i <= columnCount; i += 1)
+            {
+                headers.Add(sheet.Cell(1, i).GetString());
+            }
+
+            return headers;
+        }
+
         /// <summary>
         /// Helper for internal use to grab an XLSX header to property name map
         /// </summary>

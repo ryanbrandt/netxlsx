@@ -1,21 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using ClosedXML.Excel;
 
 namespace NetXLSX
 {
     /// <summary>
-    /// Class to containing methods to handle all XLSX reading and object mapping.
+    /// Class containing methods to handle all XLSX to object reading and mapping.
     /// </summary>
     public class XLSXReader
     {
+        internal class XLSXReaderException : Exception
+        {
+            public XLSXReaderException(string category, string message)
+                : base($"[{category.ToUpper()}] {message}") { }
+        }
+
         /// <summary>
         /// Generic method to map an XLSX sheet to a list of objects using reflection.
         /// Type must have XLSXMapping attributes defined on all properties and a public no-arg constructor.
         /// </summary>
-        public List<T> GetRecords<T>(string xlsxPath, string worksheet) where T: new()
+        public List<T> GetRecords<T>(string xlsxPath, string worksheet) where T : new()
         {
             using (var wb = new XLWorkbook(xlsxPath))
             {
@@ -24,9 +29,9 @@ namespace NetXLSX
                 var columnCount = sheet.ColumnsUsed().Count();
 
                 List<T> records = new List<T>();
-                var xlsxPropertyMap = GetPropertyNameMap(typeof(T));
-                var typeMap = GetPropertyTypeMap(typeof(T));
-                var headers = GetXLSXHeaders(sheet, columnCount);
+                var xlsxPropertyMap = XLSXUtilities.GetPropertyNameMap(typeof(T));
+                var typeMap = XLSXUtilities.GetPropertyTypeMap(typeof(T));
+                var headers = XLSXUtilities.GetXLSXHeaders(sheet, columnCount);
 
                 for (int i = 2; i <= rowCount; i += 1)
                 {
@@ -70,20 +75,6 @@ namespace NetXLSX
         }
 
         /// <summary>
-        /// Utility to grab a list of XLSX headers for a given sheet
-        /// </summary>
-        private List<string> GetXLSXHeaders(IXLWorksheet sheet, int columnCount)
-        {
-            List<string> headers = new List<string>();
-            for (int i = 1; i <= columnCount; i += 1)
-            {
-                headers.Add(sheet.Cell(1, i).GetString());
-            }
-
-            return headers;
-        }
-
-        /// <summary>
         /// Helper for internal use to grab a map of XLSX sheet headers to values.
         /// All values defaulted to null and must be set.
         /// </summary>
@@ -111,56 +102,6 @@ namespace NetXLSX
                 }
             }
             return instance;
-        }
-
-        /// <summary>
-        /// Helper for internal use to grab an XLSX header to property name map
-        /// </summary>
-        private Dictionary<string, string> GetPropertyNameMap(Type t)
-        {
-            Dictionary<string, string> propertyMap = new Dictionary<string, string>();
-            foreach (var prop in t.GetProperties())
-            {
-                var mapping = GetPropertyXLSXMapping(prop);
-                if(mapping != null)
-                {
-                    propertyMap.Add(mapping.XLSXProperty, prop.Name);
-                }
-            }
-            return propertyMap;
-        }
-
-        /// <summary>
-        /// Helper for internal use to grab an XLSX header to property type map
-        /// </summary>
-        private Dictionary<string, Type> GetPropertyTypeMap(Type t)
-        {
-            Dictionary<string, Type> propertyMap = new Dictionary<string, Type>();
-            foreach (var prop in t.GetProperties())
-            {
-                var mapping = GetPropertyXLSXMapping(prop);
-                if(mapping != null)
-                {
-                    propertyMap.Add(mapping.XLSXProperty, mapping.PropertyType);
-                }
-            }
-            return propertyMap;
-        }
-
-        /// <summary>
-        /// Helper for internal use to grab the XLSXMapping instance associated 
-        /// with a given class property
-        /// </summary>
-        private XLSXMapping GetPropertyXLSXMapping(PropertyInfo p)
-        {
-            XLSXMapping mapping = (XLSXMapping)p.GetCustomAttribute(typeof(XLSXMapping));
-            return mapping;
-        }
-
-        internal class XLSXReaderException : Exception
-        {
-            public XLSXReaderException(string category, string message)
-                : base($"[{category.ToUpper()}] {message}") { }
         }
     }
 }
